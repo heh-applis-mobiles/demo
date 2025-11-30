@@ -99,5 +99,12 @@ const cardStatus = computed(() => {
   cursor: pointer;
   font-weight: normal;
   box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.15);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.continue-button:active {
+  transform: scale(0.95);
 }
 </style>

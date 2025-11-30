@@ -122,6 +122,13 @@ function setCurrentPage(page: string) {
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.cta-button:active {
+  transform: scale(0.95);
 }
 
 /* Bottom Navigation */
@@ -137,6 +144,8 @@ function setCurrentPage(page: string) {
 .bottom-nav > div {
   flex: 1;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 </style>

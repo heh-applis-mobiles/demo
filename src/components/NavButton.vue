@@ -30,6 +30,11 @@ defineProps<{
   font-size: 24px;
   width: 24px;
   height: 24px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-button:active .icon {
+  transform: scale(0.85);
 }
 
 .icon.active-icon {
