@@ -14,7 +14,7 @@ defineProps<{
   </div>
 
   <div v-else-if="variante === 'Terminés'" class="badge badge-completed">
-    <div class="icon">
+    <div class="icon icon-total">
       <font-awesome-icon icon="fa-solid fa-trophy" />
     </div>
     <p class="number">4</p>
@@ -45,14 +45,16 @@ defineProps<{
 
 .badge-total {
   background-color: #dbeafe;
+  color: #155DFC;
 }
-
 .badge-started {
   background-color: #dcfce7;
+  color: #00A63E;
 }
 
 .badge-completed {
   background-color: #f3e8ff;
+  color: #9810FA;
 }
 
 .icon {
