@@ -8,7 +8,7 @@ import PWABadge from './components/PWABadge.vue'
   <div class="home-page">
     <!-- Header -->
     <header class="header">
-      <h1>Bienvenue à la HEH</h1>
+      <img src="./assets/LogoHEH.png" class="logo" >
     </header>
 
     <!-- Content -->
@@ -59,21 +59,20 @@ import PWABadge from './components/PWABadge.vue'
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #e41513;
+  background-color: #101828;
 }
 
 /* Header */
 .header {
-  padding: 48px 24px;
-  background-color: #e41513;
+  padding: 24px 24px;
+  background-color: #101828;
 }
 
-.header h1 {
-  font-family: Arial, sans-serif;
-  font-size: 36px;
-  line-height: 36px;
-  color: white;
-  margin: 0;
+.logo {
+  height: 101.92px;
+  flex-shrink: 0;
+  align-self: stretch;
+  aspect-ratio: 364.00/101.19;
 }
 
 /* Content */
@@ -169,16 +168,10 @@ import PWABadge from './components/PWABadge.vue'
   height: 40px;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  background: linear-gradient(to right, #ff8904, #f6339a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #e41513;
   cursor: pointer;
   font-weight: normal;
-}
-
-.continue-button:hover {
-  opacity: 0.9;
+  box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.15);
 }
 
 /* CTA Button */
@@ -186,8 +179,8 @@ import PWABadge from './components/PWABadge.vue'
   background-color: #e41513;
   color: white;
   border: none;
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 24px;
+  padding: 8px 16px;
   height: 48px;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -196,10 +189,6 @@ import PWABadge from './components/PWABadge.vue'
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.cta-button:hover {
-  background-color: #c71311;
 }
 
 /* Bottom Navigation */
@@ -211,4 +200,5 @@ import PWABadge from './components/PWABadge.vue'
   padding: 8px;
   gap: 8px;
 }
+
 </style>

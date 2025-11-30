@@ -19,7 +19,7 @@ export default defineConfig({
         name: "appli-mobile",
         short_name: "appli-mobile",
         description: "appli-mobile",
-        theme_color: "#ffffff",
+        theme_color: "#E41513",
       },
 
       workbox: {
