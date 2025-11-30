@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faHouse, faBook } from '@fortawesome/free-solid-svg-icons'
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 defineProps<{
-  variante?: 'Accueil' | 'Cours'
+  title: string
+  icon: IconDefinition
   current?: boolean
 }>()
 </script>
 
 <template>
-  <div v-if="variante === 'Cours' && !current" class="nav-button">
-    <FontAwesomeIcon :icon="faBook" class="icon inactive-icon" />
-    <p class="label inactive">Cours</p>
-  </div>
-
-  <div v-else class="nav-button">
-    <FontAwesomeIcon :icon="faHouse" class="icon active-icon" />
-    <p class="label active">Accueil</p>
+  <div class="nav-button">
+    <FontAwesomeIcon :icon="icon" :class="['icon', current ? 'active-icon' : 'inactive-icon']" />
+    <p :class="['label', current ? 'active' : 'inactive']">{{ title }}</p>
   </div>
 </template>
 

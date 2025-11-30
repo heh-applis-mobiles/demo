@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { faHouse, faBook } from '@fortawesome/free-solid-svg-icons'
 import Badge from './components/Badge.vue'
 import CourseCard from './components/CourseCard.vue'
 import NavButton from './components/NavButton.vue'
 import PWABadge from './components/PWABadge.vue'
+
+const currentPage = ref('Accueil')
+
+function setCurrentPage(page: string) {
+  currentPage.value = page
+}
 </script>
 
 <template>
@@ -33,8 +41,12 @@ import PWABadge from './components/PWABadge.vue'
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-      <NavButton variante="Accueil" :current="true" />
-      <NavButton variante="Cours" :current="false" />
+      <div @click="setCurrentPage('Accueil')">
+        <NavButton title="Accueil" :icon="faHouse" :current="currentPage === 'Accueil'" />
+      </div>
+      <div @click="setCurrentPage('Cours')">
+        <NavButton title="Cours" :icon="faBook" :current="currentPage === 'Cours'" />
+      </div>
     </nav>
 
     <PWABadge />
@@ -120,6 +132,11 @@ import PWABadge from './components/PWABadge.vue'
   display: flex;
   padding: 8px;
   gap: 8px;
+}
+
+.bottom-nav > div {
+  flex: 1;
+  cursor: pointer;
 }
 
 </style>
