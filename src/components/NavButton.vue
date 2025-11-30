@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faHouse, faBook } from '@fortawesome/free-solid-svg-icons'
+
 defineProps<{
   variante?: 'Accueil' | 'Cours'
   current?: boolean
@@ -7,12 +10,12 @@ defineProps<{
 
 <template>
   <div v-if="variante === 'Cours' && !current" class="nav-button">
-    <div class="icon">📖</div>
+    <FontAwesomeIcon :icon="faBook" class="icon inactive-icon" />
     <p class="label inactive">Cours</p>
   </div>
 
   <div v-else class="nav-button">
-    <div class="icon">🏠</div>
+    <FontAwesomeIcon :icon="faHouse" class="icon active-icon" />
     <p class="label active">Accueil</p>
   </div>
 </template>
@@ -31,6 +34,14 @@ defineProps<{
   font-size: 24px;
   width: 24px;
   height: 24px;
+}
+
+.icon.active-icon {
+  color: #e41513;
+}
+
+.icon.inactive-icon {
+  color: #4a5565;
 }
 
 .label {
