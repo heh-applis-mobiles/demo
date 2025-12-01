@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-const {progress} = defineProps<{
+const { progress } = defineProps<{
   progress: number
   title: string
 }>()
@@ -10,9 +10,9 @@ const cardStatus = computed(() => {
   if (progress === 0) {
     return 'À découvrir';
   } else if (progress === 100) {
-    return 'Cours terminé';
+    return 'Terminé';
   } else {
-    return 'Cours démarré';
+    return 'Démarré';
   }
 });
 </script>
@@ -30,11 +30,11 @@ const cardStatus = computed(() => {
       <div class="progress-level" :style="{ width: `${progress}%` }"></div>
     </div>
 
-    <button class="continue-button">Continuer</button>
+    <button class="action-button">Continuer</button>
   </div>
 </template>
 
-<style scoped>
+<style>
 .course-card {
   background: linear-gradient(to right, #ff8904, #f6339a);
   border-radius: 16px;
@@ -52,8 +52,7 @@ const cardStatus = computed(() => {
 }
 
 .card-status {
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   color: white;
 }
 
@@ -61,14 +60,12 @@ const cardStatus = computed(() => {
   background-color: rgba(255, 255, 255, 0.2);
   padding: 4px 10px;
   border-radius: 12px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   color: white;
 }
 
 .card-title {
-  font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: white;
   margin: 0;
 }
@@ -87,24 +84,21 @@ const cardStatus = computed(() => {
   transition: width 0.3s ease;
 }
 
-.continue-button {
+.action-button {
   background: white;
   border: none;
   border-radius: 20px;
   padding: 8px 16px;
   height: 40px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: #e41513;
+  font-size: 1rem;
   cursor: pointer;
-  font-weight: normal;
   box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.15);
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
   transition: transform 0.2s ease;
 }
 
-.continue-button:active {
+.action-button:active {
   transform: scale(0.95);
 }
 </style>

@@ -47,6 +47,7 @@ defineProps<{
   background-color: #dbeafe;
   color: #155DFC;
 }
+
 .badge-started {
   background-color: #dcfce7;
   color: #00A63E;
@@ -58,7 +59,7 @@ defineProps<{
 }
 
 .icon {
-  font-size: 24px;
+  font-size: 1.5rem;
   width: 24px;
   height: 24px;
   display: flex;
@@ -67,16 +68,14 @@ defineProps<{
 }
 
 .number {
-  font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #101828;
   margin: 0;
   text-align: center;
 }
 
 .label {
-  font-family: 'Roboto', sans-serif;
-  font-size: 12px;
+  font-size: 1rem;
   color: #4a5565;
   margin: 0;
   text-align: center;
