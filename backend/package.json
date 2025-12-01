@@ -1,0 +1,17 @@
+{
+  "name": "backend-appli-mobile",
+  "version": "1.0.0",
+  "description": "Provides data for the appli-mobile app.",
+  "license": "UNLICENSED",
+  "author": "François Roland <francois.roland@heh.be>",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@fastify/caching": "^9.0.3",
+    "@fastify/cors": "^11.1.0",
+    "fastify": "^5.6.2"
+  }
+}
