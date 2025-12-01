@@ -15,5 +15,7 @@
   flex-direction: column;
   gap: 24px;
   padding: 24px;
+  overflow-y: auto;
+  min-height: 0;
 }
 </style>

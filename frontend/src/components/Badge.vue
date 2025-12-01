@@ -1,31 +1,35 @@
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBook, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons'
+
 defineProps<{
-  variante?: 'Total' | 'Démarrés' | 'Terminés'
+  variante: 'Total' | 'Démarrés' | 'Terminés';
+  count: number;
 }>()
 </script>
 
 <template>
   <div v-if="variante === 'Démarrés'" class="badge badge-started">
     <div class="icon">
-      <font-awesome-icon icon="fa-solid fa-chart-line" />
+      <FontAwesomeIcon :icon="faChartLine" />
     </div>
-    <p class="number">8</p>
+    <p class="number">{{ count }}</p>
     <p class="label">Commencés</p>
   </div>
 
   <div v-else-if="variante === 'Terminés'" class="badge badge-completed">
     <div class="icon icon-total">
-      <font-awesome-icon icon="fa-solid fa-trophy" />
+      <FontAwesomeIcon :icon="faTrophy" />
     </div>
-    <p class="number">4</p>
+    <p class="number">{{ count }}</p>
     <p class="label">Terminés</p>
   </div>
 
   <div v-else class="badge badge-total">
     <div class="icon">
-      <font-awesome-icon icon="fa-solid fa-book" />
+      <FontAwesomeIcon :icon="faBook" />
     </div>
-    <p class="number">12</p>
+    <p class="number">{{ count }}</p>
     <p class="label">Cours</p>
   </div>
 </template>

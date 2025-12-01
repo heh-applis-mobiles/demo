@@ -15,6 +15,16 @@ const cardStatus = computed(() => {
     return 'Démarré';
   }
 });
+
+const cardAction = computed(() => {
+  if (progress === 0) {
+    return 'Commencer';
+  } else if (progress === 100) {
+    return 'Recommencer';
+  } else {
+    return 'Continuer';
+  }
+});
 </script>
 
 <template>
@@ -30,14 +40,14 @@ const cardStatus = computed(() => {
       <div class="progress-level" :style="{ width: `${progress}%` }"></div>
     </div>
 
-    <button class="action-button">Continuer</button>
+    <button class="action-button">{{ cardAction }}</button>
   </div>
 </template>
 
 <style>
 .course-card {
-  background: linear-gradient(to right, #ff8904, #f6339a);
   border-radius: 16px;
+  background: linear-gradient(to right, #FF8904 0%, #F6339A 100%);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -66,6 +76,7 @@ const cardStatus = computed(() => {
 
 .card-title {
   font-size: 1.5rem;
+  font-weight: normal;
   color: white;
   margin: 0;
 }

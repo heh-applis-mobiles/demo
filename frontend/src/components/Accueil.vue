@@ -2,10 +2,22 @@
 import Badge from './Badge.vue';
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
+import { getCourses } from '../utils/courses';
+import { computed, ref } from 'vue';
 
 defineProps<{
   ctaAction: () => void
 }>()
+
+const courses = ref(getCourses());
+const totalCourseCount = computed(() => courses.value.length);
+const startedCourses = computed(() => courses.value.filter(course => course.progress > 0 && course.progress < 100));
+const startedCourseCount = computed(() => startedCourses.value.length);
+const completedCoursesCount = computed(() => courses.value.filter(course => course.progress === 100).length);
+const lastStartedCourse = computed(() => {
+  const sorted = [...startedCourses.value].sort((a, b) => (b.lastAccessed?.getTime() ?? 0) - (a.lastAccessed?.getTime() ?? 0));
+  return sorted[0];
+});
 </script>
 
 <template>
@@ -18,15 +30,15 @@ defineProps<{
   <Content>
     <!-- Overview Badges -->
     <div class="overview">
-      <Badge variante="Total" />
-      <Badge variante="Démarrés" />
-      <Badge variante="Terminés" />
+      <Badge variante="Total" :count="totalCourseCount" />
+      <Badge variante="Démarrés" :count="startedCourseCount" />
+      <Badge variante="Terminés" :count="completedCoursesCount" />
     </div>
 
     <!-- Continue Learning Section -->
-    <div class="continue-section">
+    <div class="continue-section" v-if="lastStartedCourse">
       <h2>Continuer à apprendre</h2>
-      <CourseCard :progress="65" title="Design et dev d'applis mobiles" />
+      <CourseCard :progress="lastStartedCourse.progress" :title="lastStartedCourse.title" />
     </div>
 
     <!-- Browse All Courses Button -->
