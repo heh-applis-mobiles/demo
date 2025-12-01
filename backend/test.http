@@ -6,3 +6,8 @@ Accept: application/json
 GET http://localhost:3000/api/courses
 Accept: application/json
 If-None-Match: constant-course-list
+
+###
+
+GET http://localhost:3000/api/courses/lastAccessed
+Accept: application/json

@@ -23,6 +23,10 @@ fastify.get('/api/courses', async (request, reply) => {
   return COURSES
 })
 
+fastify.get('/api/courses/lastAccessed', async (request, reply) => {
+  return COURSES.filter(course => course.lastAccessed).toSorted((a, b) => b.lastAccessed.getTime() - a.lastAccessed.getTime())[0] || null
+})
+
 const start = async () => {
   try {
     await fastify.listen({ port: 3000 })
