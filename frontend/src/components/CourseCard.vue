@@ -97,6 +97,7 @@ const cardAction = computed(() => {
 
 .action-button {
   background: white;
+  color: #101828;
   border: none;
   border-radius: 20px;
   padding: 8px 16px;

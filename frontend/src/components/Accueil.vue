@@ -1,23 +1,23 @@
 <script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query';
+import type { Course } from '../utils/courses';
+import { getCourses, getLastAccessedCourse } from '../utils/courses';
 import Badge from './Badge.vue';
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
-import { getCourses } from '../utils/courses';
-import { computed, ref } from 'vue';
 
 defineProps<{
   ctaAction: () => void
 }>()
 
-const courses = ref(getCourses());
-const totalCourseCount = computed(() => courses.value.length);
-const startedCourses = computed(() => courses.value.filter(course => course.progress > 0 && course.progress < 100));
-const startedCourseCount = computed(() => startedCourses.value.length);
-const completedCoursesCount = computed(() => courses.value.filter(course => course.progress === 100).length);
-const lastStartedCourse = computed(() => {
-  const sorted = [...startedCourses.value].sort((a, b) => (b.lastAccessed?.getTime() ?? 0) - (a.lastAccessed?.getTime() ?? 0));
-  return sorted[0];
-});
+const { data: courses, error: coursesError, isPending: coursesIsPending } = useQuery({
+  queryKey: ['courses'],
+  queryFn: getCourses,
+})
+const { data: lastAccessedCourse } = useQuery({
+  queryKey: ['courses', 'lastAccessed'],
+  queryFn: getLastAccessedCourse,
+})
 </script>
 
 <template>
@@ -28,18 +28,23 @@ const lastStartedCourse = computed(() => {
 
   <!-- Content -->
   <Content>
-    <!-- Overview Badges -->
-    <div class="overview">
-      <Badge variante="Total" :count="totalCourseCount" />
-      <Badge variante="Démarrés" :count="startedCourseCount" />
-      <Badge variante="Terminés" :count="completedCoursesCount" />
-    </div>
+    <span v-if="coursesIsPending">Chargement des cours...</span>
+    <span v-else-if="coursesError">Erreur lors du chargement des cours.</span>
+    <template v-else-if="courses">
+      <!-- Overview Badges -->
+      <div class="overview">
+        <Badge variante="Total" :count="courses.length" />
+        <Badge variante="Démarrés"
+          :count="courses.filter((course: Course) => course.progress > 0 && course.progress < 100).length" />
+        <Badge variante="Terminés" :count="courses.filter((course: Course) => course.progress === 100).length" />
+      </div>
 
-    <!-- Continue Learning Section -->
-    <div class="continue-section" v-if="lastStartedCourse">
-      <h2>Continuer à apprendre</h2>
-      <CourseCard :progress="lastStartedCourse.progress" :title="lastStartedCourse.title" />
-    </div>
+      <!-- Continue Learning Section -->
+      <div class="continue-section" v-if="lastAccessedCourse">
+        <h2>Continuer à apprendre</h2>
+        <CourseCard :progress="lastAccessedCourse.progress" :title="lastAccessedCourse.title" />
+      </div>
+    </template>
 
     <!-- Browse All Courses Button -->
     <button class="cta-button" @click="ctaAction">Parcourir tous les cours</button>

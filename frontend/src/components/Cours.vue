@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query';
+import { getCourses } from '../utils/courses';
+
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
-import { getCourses } from '../utils/courses';
-import { ref } from 'vue';
 
 function chooseGradient(index: number): string {
   const gradients = [
@@ -15,7 +16,11 @@ function chooseGradient(index: number): string {
   return gradients[index % gradients.length]!;
 }
 
-const courses = ref(getCourses().toSorted((a, b) => (b.lastAccessed?.getTime() ?? 0) - (a.lastAccessed?.getTime() ?? 0)));
+const { data: courses, error: coursesError, isPending: coursesIsPending } = useQuery({
+  queryKey: ['courses'],
+  queryFn: getCourses,
+})
+
 
 </script>
 
@@ -26,8 +31,12 @@ const courses = ref(getCourses().toSorted((a, b) => (b.lastAccessed?.getTime() ?
   </header>
 
   <Content>
-    <CourseCard v-for="(course, index) in courses" :key="course.title" :progress="course.progress" :title="course.title"
-      :class="chooseGradient(index)" />
+    <span v-if="coursesIsPending">Chargement des cours...</span>
+    <span v-else-if="coursesError">Erreur lors du chargement des cours.</span>
+    <template v-else>
+      <CourseCard v-for="(course, index) in courses" :key="course.title" :progress="course.progress"
+        :title="course.title" :class="chooseGradient(index)" />
+    </template>
   </Content>
 </template>
 

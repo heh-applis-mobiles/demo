@@ -8,7 +8,6 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: false,
 
       pwaAssets: {
         disabled: false,
@@ -24,8 +23,20 @@ export default defineConfig({
 
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,ttf}"],
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^http:\/\/localhost:3000\/.*/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 300,
+              },
+              networkTimeoutSeconds: 5,
+            },
+          }
+        ]
       },
 
       devOptions: {
