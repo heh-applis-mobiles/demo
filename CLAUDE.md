@@ -51,9 +51,59 @@ Ce projet est une **PWA de référence** créée pour servir de support pédagog
 
 ```
 /
-|-- frontend/ # Dossier de l'appli frontend Vue.js + PWA
-|-- backend/ # Dossier de l'API
+├── frontend/                   # Application PWA Vue.js
+│   ├── public/                 # Ressources publiques statiques
+│   ├── src/                    # Code source de l'application
+│   │   ├── assets/             # Ressources (images, fonts, etc.)
+│   │   ├── components/         # Composants Vue réutilisables
+│   │   ├── utils/              # Utilitaires et helpers
+│   │   ├── App.vue             # Composant racine de l'application
+│   │   ├── main.ts             # Point d'entrée de l'app (initialisation Vue)
+│   │   ├── style.css           # Styles globaux
+│   │
+│   ├── dist/                   # Build de production (généré)
+│   ├── node_modules/           # Dépendances npm (généré)
+│   │
+│   ├── package.json            # Dépendances et scripts npm
+│   ├── package-lock.json       # Lock des versions de dépendances
+│   ├── vite.config.ts          # ⭐ Configuration Vite + PWA (IMPORTANT)
+│   ├── pwa-assets.config.ts    # Configuration des icônes PWA
+│   └── README.md               # Documentation du frontend
+│
+└── backend/                    # API Express simple (mock)
+    ├── node_modules/           # Dépendances npm (généré)
+    │
+    ├── server.js               # ⭐ Serveur Express (endpoints API)
+    ├── package.json            # Dépendances backend
+    └── package-lock.json       # Lock des versions
 ```
+
+### 📋 Fichiers clés à connaître
+
+#### Configuration PWA
+
+- **[frontend/vite.config.ts](frontend/vite.config.ts)** : Configuration du plugin PWA Vite, stratégies de cache, manifest
+- **[frontend/pwa-assets.config.ts](frontend/pwa-assets.config.ts)** : Génération automatique des icônes PWA
+
+#### Point d'entrée
+
+- **[frontend/src/main.ts](frontend/src/main.ts)** : Initialisation de Vue, enregistrement du service worker
+- **[frontend/index.html](frontend/index.html)** : Template HTML, balises meta pour PWA
+
+#### Composants principaux
+
+- **[frontend/src/App.vue](frontend/src/App.vue)** : Composant racine, gestion du routage simple
+- **[frontend/src/components/Accueil.vue](frontend/src/components/Accueil.vue)** : Page d'accueil avec liste des cours
+- **[frontend/src/components/Cours.vue](frontend/src/components/Cours.vue)** : Page de détail d'un cours
+
+#### Données et types
+
+- **[frontend/src/utils/courses.ts](frontend/src/utils/courses.ts)** : Types TypeScript et interface des cours
+
+#### Backend (simple)
+
+- **[backend/server.js](backend/server.js)** : API Express avec 2 endpoints (`GET /api/courses`, `GET /api/last-accessed`)
+- **[backend/courses.js](backend/courses.js)** : Données mock des cours (pour démonstration)
 
 ## Exigences pédagogiques
 
