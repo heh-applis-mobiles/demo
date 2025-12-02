@@ -6,4 +6,3 @@ export type Course = {
 
 
 export const getCourses = async (): Promise<Course[]> => await fetch('http://localhost:3000/api/courses').then((response) => response.json());
-export const getLastAccessedCourse = async (): Promise<Course | null> => await fetch('http://localhost:3000/api/courses/lastAccessed').then((response) => response.json());

@@ -20,8 +20,6 @@ const { data: courses, error: coursesError, isPending: coursesIsPending } = useQ
   queryKey: ['courses'],
   queryFn: getCourses,
 })
-
-
 </script>
 
 <template>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
 import type { Course } from '../utils/courses';
-import { getCourses, getLastAccessedCourse } from '../utils/courses';
+import { getCourses } from '../utils/courses';
 import Badge from './Badge.vue';
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
+import { computed } from 'vue';
 
 defineProps<{
   ctaAction: () => void
@@ -14,9 +15,18 @@ const { data: courses, error: coursesError, isPending: coursesIsPending } = useQ
   queryKey: ['courses'],
   queryFn: getCourses,
 })
-const { data: lastAccessedCourse } = useQuery({
-  queryKey: ['courses', 'lastAccessed'],
-  queryFn: getLastAccessedCourse,
+
+const lastAccessedCourse = computed(() => {
+  if (!courses?.value) return undefined
+
+  const accessedCourses = courses.value.filter(course => course.lastAccessed)
+  if (accessedCourses.length < 1) return undefined
+  accessedCourses.sort((a, b) => {
+    if (!a.lastAccessed || !b.lastAccessed) return 0
+    return new Date(b.lastAccessed).getTime() - new Date(a.lastAccessed).getTime()
+  })
+
+  return accessedCourses[0]
 })
 </script>
 
