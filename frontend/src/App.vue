@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { faHouse, faBook } from '@fortawesome/free-solid-svg-icons'
-import NavButton from './components/NavButton.vue'
-import Accueil from './components/Accueil.vue'
-import Cours from './components/Cours.vue'
+import { ref } from 'vue';
+import { faHouse, faBook } from '@fortawesome/free-solid-svg-icons';
+import NavButton from './components/NavButton.vue';
+import Accueil from './components/Accueil.vue';
+import Cours from './components/Cours.vue';
 
-const currentTab = ref('Accueil')
+const currentTab = ref('Accueil');
 
 function goToCourses() {
-  currentTab.value = 'Cours'
+  currentTab.value = 'Cours';
 }
-
 </script>
 
 <template>
@@ -19,7 +18,7 @@ function goToCourses() {
     <Accueil v-if="currentTab === 'Accueil'" :ctaAction="goToCourses" />
     <Cours v-if="currentTab === 'Cours'" />
 
-    <!-- Bottom Navigation -->
+    <!-- Navigation inférieure -->
     <nav class="bottom-nav">
       <div @click="currentTab = 'Accueil'">
         <NavButton title="Accueil" :icon="faHouse" :current="currentTab === 'Accueil'" />
@@ -41,7 +40,7 @@ function goToCourses() {
   overflow: hidden;
 }
 
-/* Bottom Navigation */
+/* Navigation inférieure */
 .bottom-nav {
   background-color: white;
   border-top: 0.4px solid rgba(0, 0, 0, 0.30);

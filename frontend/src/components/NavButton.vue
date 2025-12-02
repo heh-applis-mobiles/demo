@@ -1,18 +1,35 @@
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { computed } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-defineProps<{
-  title: string
-  icon: IconDefinition
-  current?: boolean
-}>()
+const { title, icon, current } = defineProps<{
+  title: string;
+  icon: IconDefinition;
+  current?: boolean;
+}>();
+
+/**
+ * Classes CSS pour l'icône
+ * Change de couleur selon si le bouton est actif ou non
+ */
+const iconClasses = computed(() => {
+  return ['icon', current ? 'active-icon' : 'inactive-icon'];
+});
+
+/**
+ * Classes CSS pour le label
+ * Change de couleur selon si le bouton est actif ou non
+ */
+const labelClasses = computed(() => {
+  return ['label', current ? 'active' : 'inactive'];
+});
 </script>
 
 <template>
   <div class="nav-button">
-    <FontAwesomeIcon :icon="icon" :class="['icon', current ? 'active-icon' : 'inactive-icon']" />
-    <p :class="['label', current ? 'active' : 'inactive']">{{ title }}</p>
+    <FontAwesomeIcon :icon="icon" :class="iconClasses" />
+    <p :class="labelClasses">{{ title }}</p>
   </div>
 </template>
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import type { Course } from '../utils/courses';
 import { getCourses } from '../utils/courses';
 import Badge from './Badge.vue';
 import Content from './Content.vue';
@@ -8,61 +7,95 @@ import CourseCard from './CourseCard.vue';
 import { computed } from 'vue';
 
 defineProps<{
-  ctaAction: () => void
-}>()
+  ctaAction: () => void;
+}>();
 
 const { data: courses, error: coursesError, isPending: coursesIsPending } = useQuery({
   queryKey: ['courses'],
   queryFn: getCourses,
-})
+});
 
+// --- Computed properties pour les statistiques de cours ---
+
+// Cours qui ont été commencés mais pas terminés (0 < progress < 100)
+const startedCourses = computed(() => {
+  if (!courses?.value) {
+    return [];
+  } else {
+    return courses.value.filter(course => course.progress > 0 && course.progress < 100);
+  }
+});
+
+// Cours qui sont terminés à 100%
+const completedCourses = computed(() => {
+  if (!courses?.value) {
+    return [];
+  } else {
+    return courses.value.filter(course => course.progress === 100);
+  }
+});
+
+// --- Logique pour afficher le dernier cours consulté ---
+
+/**
+ * Trouve le cours qui a été consulté le plus récemment
+ * Utile pour la section "Continuer à apprendre"
+ */
 const lastAccessedCourse = computed(() => {
-  if (!courses?.value) return undefined
+  // Si les cours ne sont pas encore chargés, on retourne undefined
+  if (!courses?.value) return undefined;
 
-  const accessedCourses = courses.value.filter(course => course.lastAccessed)
-  if (accessedCourses.length < 1) return undefined
-  accessedCourses.sort((a, b) => {
-    if (!a.lastAccessed || !b.lastAccessed) return 0
-    return new Date(b.lastAccessed).getTime() - new Date(a.lastAccessed).getTime()
-  })
+  // Étape 1 : Filtrer uniquement les cours qui ont une date de dernière consultation
+  const accessedCourses = courses.value.filter(course => course.lastAccessed);
 
-  return accessedCourses[0]
-})
+  // Si aucun cours n'a été consulté, on retourne undefined
+  if (accessedCourses.length === 0) return undefined;
+
+  // Étape 2 : Trier les cours du plus récent au plus ancien
+  const sortedCourses = [...accessedCourses].sort((courseA, courseB) => {
+    // On compare les dates converties en millisecondes pour faciliter le tri
+    const dateA = new Date(courseA.lastAccessed!).getTime();
+    const dateB = new Date(courseB.lastAccessed!).getTime();
+    return dateB - dateA; // Ordre décroissant (plus récent en premier)
+  });
+
+  // Étape 3 : Retourner le premier cours (le plus récent)
+  return sortedCourses[0];
+});
 </script>
 
 <template>
-  <!-- Header -->
+  <!-- En-tête -->
   <header class="header">
     <img src="../assets/LogoHEH.png" class="logo">
   </header>
 
-  <!-- Content -->
+  <!-- Contenu principal -->
   <Content>
     <span v-if="coursesIsPending">Chargement des cours...</span>
     <span v-else-if="coursesError">Erreur lors du chargement des cours.</span>
     <template v-else-if="courses">
-      <!-- Overview Badges -->
+      <!-- Badges de statistiques -->
       <div class="overview">
         <Badge variante="Total" :count="courses.length" />
-        <Badge variante="Démarrés"
-          :count="courses.filter((course: Course) => course.progress > 0 && course.progress < 100).length" />
-        <Badge variante="Terminés" :count="courses.filter((course: Course) => course.progress === 100).length" />
+        <Badge variante="Démarrés" :count="startedCourses.length" />
+        <Badge variante="Terminés" :count="completedCourses.length" />
       </div>
 
-      <!-- Continue Learning Section -->
+      <!-- Section "Continuer à apprendre" -->
       <div class="continue-section" v-if="lastAccessedCourse">
         <h2>Continuer à apprendre</h2>
         <CourseCard :progress="lastAccessedCourse.progress" :title="lastAccessedCourse.title" />
       </div>
     </template>
 
-    <!-- Browse All Courses Button -->
+    <!-- Bouton d'action principal -->
     <button class="cta-button" @click="ctaAction">Parcourir tous les cours</button>
   </Content>
 </template>
 
 <style>
-/* Header */
+/* En-tête */
 .header {
   padding: 24px 24px;
   background-color: #101828;
@@ -75,14 +108,14 @@ const lastAccessedCourse = computed(() => {
   aspect-ratio: 364.00/101.19;
 }
 
-/* Overview */
+/* Vue d'ensemble des statistiques */
 .overview {
   display: flex;
   gap: 16px;
   width: 100%;
 }
 
-/* Continue Learning Section */
+/* Section "Continuer à apprendre" */
 .continue-section {
   display: flex;
   flex-direction: column;
@@ -94,7 +127,7 @@ const lastAccessedCourse = computed(() => {
   margin: 0;
 }
 
-/* CTA Button */
+/* Bouton d'appel à l'action (Call To Action) */
 .cta-button {
   background-color: #e41513;
   color: white;

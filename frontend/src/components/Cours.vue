@@ -5,21 +5,38 @@ import { getCourses } from '../utils/courses';
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
 
-function chooseGradient(index: number): string {
-  const gradients = [
+/**
+ * Choisit une classe de gradient pour un cours selon son index
+ *
+ * Cette fonction utilise l'opérateur modulo (%) pour faire une rotation cyclique
+ * à travers les 5 gradients disponibles. Par exemple :
+ * - index 0 → gradient-1
+ * - index 1 → gradient-2
+ * - index 5 → gradient-1 (on recommence le cycle)
+ * - index 7 → gradient-3
+ *
+ * Cela permet d'avoir une variété visuelle même avec beaucoup de cours
+ */
+function getGradientClass(index: number): string {
+  const availableGradients = [
     'gradient-1',
     'gradient-2',
     'gradient-3',
     'gradient-4',
     'gradient-5',
   ];
-  return gradients[index % gradients.length]!;
+
+  // L'opérateur % donne le reste de la division
+  // Cela crée une rotation : 0,1,2,3,4,0,1,2,3,4,...
+  const gradientIndex = index % availableGradients.length;
+
+  return availableGradients[gradientIndex]!;
 }
 
-const { data: courses, error: coursesError, isPending: coursesIsPending } = useQuery({
+const { data, error, isPending } = useQuery({
   queryKey: ['courses'],
   queryFn: getCourses,
-})
+});
 </script>
 
 <template>
@@ -29,11 +46,11 @@ const { data: courses, error: coursesError, isPending: coursesIsPending } = useQ
   </header>
 
   <Content>
-    <span v-if="coursesIsPending">Chargement des cours...</span>
-    <span v-else-if="coursesError">Erreur lors du chargement des cours.</span>
+    <span v-if="isPending">Chargement des cours...</span>
+    <span v-else-if="error">Erreur lors du chargement des cours.</span>
     <template v-else>
-      <CourseCard v-for="(course, index) in courses" :key="course.title" :progress="course.progress"
-        :title="course.title" :class="chooseGradient(index)" />
+      <CourseCard v-for="(course, index) in data" :key="course.title" :progress="course.progress" :title="course.title"
+        :class="getGradientClass(index)" />
     </template>
   </Content>
 </template>

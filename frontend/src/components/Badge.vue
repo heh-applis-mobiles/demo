@@ -1,36 +1,51 @@
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBook, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons'
+import { computed } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faBook, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons';
 
-defineProps<{
+const { variante, count } = defineProps<{
   variante: 'Total' | 'Démarrés' | 'Terminés';
   count: number;
-}>()
+}>();
+
+/**
+ * Configuration du badge selon la variante choisie
+ * Permet d'éviter la duplication de code dans le template
+ */
+const badgeConfig = computed(() => {
+  // Selon la variante, on retourne la configuration appropriée
+  switch (variante) {
+    case 'Démarrés':
+      return {
+        styleClass: 'badge-started',
+        icon: faChartLine,
+        label: 'Commencés'
+      };
+    case 'Terminés':
+      return {
+        styleClass: 'badge-completed',
+        icon: faTrophy,
+        label: 'Terminés'
+      };
+    case 'Total':
+    default:
+      return {
+        styleClass: 'badge-total',
+        icon: faBook,
+        label: 'Cours'
+      };
+  }
+});
 </script>
 
 <template>
-  <div v-if="variante === 'Démarrés'" class="badge badge-started">
+  <!-- Structure unique du badge, les styles changent selon la variante -->
+  <div class="badge" :class="badgeConfig.styleClass">
     <div class="icon">
-      <FontAwesomeIcon :icon="faChartLine" />
+      <FontAwesomeIcon :icon="badgeConfig.icon" />
     </div>
     <p class="number">{{ count }}</p>
-    <p class="label">Commencés</p>
-  </div>
-
-  <div v-else-if="variante === 'Terminés'" class="badge badge-completed">
-    <div class="icon icon-total">
-      <FontAwesomeIcon :icon="faTrophy" />
-    </div>
-    <p class="number">{{ count }}</p>
-    <p class="label">Terminés</p>
-  </div>
-
-  <div v-else class="badge badge-total">
-    <div class="icon">
-      <FontAwesomeIcon :icon="faBook" />
-    </div>
-    <p class="number">{{ count }}</p>
-    <p class="label">Cours</p>
+    <p class="label">{{ badgeConfig.label }}</p>
   </div>
 </template>
 

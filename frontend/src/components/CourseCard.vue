@@ -2,35 +2,26 @@
 import { computed } from 'vue';
 
 const { progress } = defineProps<{
-  progress: number
-  title: string
-}>()
+  progress: number;
+  title: string;
+}>();
 
-const cardStatus = computed(() => {
+const labels = computed(() => {
   if (progress === 0) {
-    return 'À découvrir';
+    return { status: 'À découvrir', action: 'Commencer' };
   } else if (progress === 100) {
-    return 'Terminé';
+    return { status: 'Terminé', action: 'Recommencer' };
   } else {
-    return 'Démarré';
+    return { status: 'Démarré', action: 'Continuer' };
   }
 });
 
-const cardAction = computed(() => {
-  if (progress === 0) {
-    return 'Commencer';
-  } else if (progress === 100) {
-    return 'Recommencer';
-  } else {
-    return 'Continuer';
-  }
-});
 </script>
 
 <template>
   <div class="course-card">
     <div class="card-header">
-      <span class="card-status">{{ cardStatus }}</span>
+      <span class="card-status">{{ labels.status }}</span>
       <span class="card-progress">{{ progress }}%</span>
     </div>
 
@@ -40,7 +31,7 @@ const cardAction = computed(() => {
       <div class="progress-level" :style="{ width: `${progress}%` }"></div>
     </div>
 
-    <button class="action-button">{{ cardAction }}</button>
+    <button class="action-button">{{ labels.action }}</button>
   </div>
 </template>
 
