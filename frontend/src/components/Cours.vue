@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
-import { getCourses } from '../utils/courses';
+import { useFetch } from '@vueuse/core';
+import type { Course } from '../types/course.ts';
 
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
@@ -33,10 +33,7 @@ function getGradientClass(index: number): string {
   return availableGradients[gradientIndex]!;
 }
 
-const { data, error, isPending } = useQuery({
-  queryKey: ['courses'],
-  queryFn: getCourses,
-});
+const { data, isFetching, error } = useFetch('http://localhost:3000/api/courses').get().json<Course[]>();
 </script>
 
 <template>
@@ -46,7 +43,7 @@ const { data, error, isPending } = useQuery({
   </header>
 
   <Content>
-    <span v-if="isPending">Chargement des cours...</span>
+    <span v-if="isFetching">Chargement des cours...</span>
     <span v-else-if="error">Erreur lors du chargement des cours.</span>
     <template v-else>
       <CourseCard v-for="(course, index) in data" :key="course.title" :progress="course.progress" :title="course.title"

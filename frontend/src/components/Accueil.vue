@@ -1,39 +1,21 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
-import { getCourses } from '../utils/courses';
+import { computed } from 'vue';
+import type { Course } from '../types/course.ts';
 import Badge from './Badge.vue';
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
-import { computed } from 'vue';
+import { useFetch } from '@vueuse/core';
+import { RouterLink, useRouter } from 'vue-router';
 
-defineProps<{
-  ctaAction: () => void;
-}>();
-
-const { data: courses, error: coursesError, isPending: coursesIsPending } = useQuery({
-  queryKey: ['courses'],
-  queryFn: getCourses,
-});
+const { data: courses, isFetching, error } = useFetch('http://localhost:3000/api/courses').json<Course[]>();
 
 // --- Computed properties pour les statistiques de cours ---
 
 // Cours qui ont été commencés mais pas terminés (0 < progress < 100)
-const startedCourses = computed(() => {
-  if (!courses?.value) {
-    return [];
-  } else {
-    return courses.value.filter(course => course.progress > 0 && course.progress < 100);
-  }
-});
+const startedCourses = computed(() => courses.value ? courses.value.filter(course => course.progress > 0 && course.progress < 100) : []);
 
 // Cours qui sont terminés à 100%
-const completedCourses = computed(() => {
-  if (!courses?.value) {
-    return [];
-  } else {
-    return courses.value.filter(course => course.progress === 100);
-  }
-});
+const completedCourses = computed(() => courses.value ? courses.value.filter(course => course.progress === 100) : []);
 
 // --- Logique pour afficher le dernier cours consulté ---
 
@@ -42,26 +24,31 @@ const completedCourses = computed(() => {
  * Utile pour la section "Continuer à apprendre"
  */
 const lastAccessedCourse = computed(() => {
-  // Si les cours ne sont pas encore chargés, on retourne undefined
-  if (!courses?.value) return undefined;
+  if (courses.value) {
 
-  // Étape 1 : Filtrer uniquement les cours qui ont une date de dernière consultation
-  const accessedCourses = courses.value.filter(course => course.lastAccessed);
+    // Étape 1 : Filtrer uniquement les cours qui ont une date de dernière consultation
+    const accessedCourses = courses.value.filter(course => course.lastAccessed);
 
-  // Si aucun cours n'a été consulté, on retourne undefined
-  if (accessedCourses.length === 0) return undefined;
+    // Si aucun cours n'a été consulté, on retourne undefined
+    if (accessedCourses.length === 0) return undefined;
 
-  // Étape 2 : Trier les cours du plus récent au plus ancien
-  const sortedCourses = [...accessedCourses].sort((courseA, courseB) => {
-    // On compare les dates converties en millisecondes pour faciliter le tri
-    const dateA = new Date(courseA.lastAccessed!).getTime();
-    const dateB = new Date(courseB.lastAccessed!).getTime();
-    return dateB - dateA; // Ordre décroissant (plus récent en premier)
-  });
+    // Étape 2 : Trier les cours du plus récent au plus ancien
+    const sortedCourses = [...accessedCourses].sort((courseA, courseB) => {
+      // On compare les dates converties en millisecondes pour faciliter le tri
+      const dateA = new Date(courseA.lastAccessed!).getTime();
+      const dateB = new Date(courseB.lastAccessed!).getTime();
+      return dateB - dateA; // Ordre décroissant (plus récent en premier)
+    });
 
-  // Étape 3 : Retourner le premier cours (le plus récent)
-  return sortedCourses[0];
+    // Étape 3 : Retourner le premier cours (le plus récent)
+    return sortedCourses[0];
+  } else {
+    // Si les cours ne sont pas encore chargés, on retourne undefined
+    return undefined;
+  }
 });
+
+const router = useRouter();
 </script>
 
 <template>
@@ -72,8 +59,8 @@ const lastAccessedCourse = computed(() => {
 
   <!-- Contenu principal -->
   <Content>
-    <span v-if="coursesIsPending">Chargement des cours...</span>
-    <span v-else-if="coursesError">Erreur lors du chargement des cours.</span>
+    <span v-if="isFetching">Chargement des cours...</span>
+    <span v-else-if="error">Erreur lors du chargement des cours.</span>
     <template v-else-if="courses">
       <!-- Badges de statistiques -->
       <div class="overview">
@@ -90,7 +77,7 @@ const lastAccessedCourse = computed(() => {
     </template>
 
     <!-- Bouton d'action principal -->
-    <button class="cta-button" @click="ctaAction">Parcourir tous les cours</button>
+    <button class="cta-button" @click="router.push('/cours')">Parcourir tous les cours</button>
   </Content>
 </template>
 

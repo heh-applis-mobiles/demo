@@ -1,31 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { faHouse, faBook } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faHouse } from '@fortawesome/free-solid-svg-icons';
+import { RouterView } from 'vue-router';
 import NavButton from './components/NavButton.vue';
-import Accueil from './components/Accueil.vue';
-import Cours from './components/Cours.vue';
 
-const currentTab = ref('Accueil');
-
-function goToCourses() {
-  currentTab.value = 'Cours';
-}
 </script>
 
 <template>
   <div class="home-page">
-
-    <Accueil v-if="currentTab === 'Accueil'" :ctaAction="goToCourses" />
-    <Cours v-if="currentTab === 'Cours'" />
+    <RouterView />
 
     <!-- Navigation inférieure -->
     <nav class="bottom-nav">
-      <div @click="currentTab = 'Accueil'">
-        <NavButton title="Accueil" :icon="faHouse" :current="currentTab === 'Accueil'" />
-      </div>
-      <div @click="currentTab = 'Cours'">
-        <NavButton title="Cours" :icon="faBook" :current="currentTab === 'Cours'" />
-      </div>
+      <NavButton to="/" title="Accueil" :icon="faHouse" />
+      <NavButton to="/cours" title="Cours" :icon="faBook" />
     </nav>
   </div>
 </template>
@@ -51,10 +38,4 @@ function goToCourses() {
   gap: 8px;
 }
 
-.bottom-nav>div {
-  flex: 1;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-}
 </style>
