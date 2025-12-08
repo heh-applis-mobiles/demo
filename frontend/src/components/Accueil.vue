@@ -5,7 +5,7 @@ import Badge from './Badge.vue';
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
 import { useFetch } from '@vueuse/core';
-import { RouterLink, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const { data: courses, isFetching, error } = useFetch('http://localhost:3000/api/courses').json<Course[]>();
 
