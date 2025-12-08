@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useFetch } from '@vueuse/core';
 import type { Course } from '../types/course.ts';
+import SmallLogoHEH from '../assets/SmallLogoHEH.svg';
 
 import Content from './Content.vue';
 import CourseCard from './CourseCard.vue';
@@ -38,7 +39,7 @@ const { data, isFetching, error } = useFetch('http://localhost:3000/api/courses'
 
 <template>
   <header class="smallHeader">
-    <img src="../assets/SmallLogoHEH.svg" alt="Logo HEH" />
+    <img :src="SmallLogoHEH" alt="Logo HEH" />
     <span>Liste des cours</span>
   </header>
 
